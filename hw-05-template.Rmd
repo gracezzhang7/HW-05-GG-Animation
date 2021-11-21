@@ -1,0 +1,67 @@
+---
+title: 'Homework 05: Paint a plot, pick a package'
+author: '[Grace Zhang]'
+date: '[11-18-21]'
+output: 
+  pdf_document:
+    fig_height: 3
+    fig_width: 6
+  html_document:
+    keep_md: TRUE
+    df_print: paged
+subtitle: 'due Sat, Oct 30 at 11:59p '
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(warning = FALSE, 
+                      message = FALSE)
+```
+
+## Load packages & data
+**install packages through the console so it doesn't re-install every time you knit
+
+```{r load-packages-data}
+library(tidyverse)
+library(palmerpenguins)
+library("ggplot2")
+``` 
+
+## Exercise 1
+```{r bill length vs flipper length, warnings = FALSE}
+mycolors = c("#9D3822", "#229D6B", "#52229D")
+
+ggp <- penguins %>%
+  ggplot(aes(x = flipper_length_mm, y = bill_length_mm, color = species, size = body_mass_g)) +
+  geom_point() +
+  labs(title = "Bill vs Flipper Length", x = "Flipper Length", y = "Bill Length") +
+  scale_color_manual(values = mycolors)
+
+windowsFonts(A = windowsFont("Symbol"))
+ggp +
+  theme(text = element_text(family = "A")) +
+  theme(axis.text = element_text(size = 12),
+        axis.title = element_text(size = 14, face = "bold"))
+```
+Font change source: https://statisticsglobe.com/change-font-of-plot-in-r#example-2-changing-font-of-ggplot2-plot 
+
+Font size change source: https://stackoverflow.com/questions/14942681/change-size-of-axes-title-and-labels-in-ggplot2 
+
+## Exercise 2
+```{r install package}
+library(gganimate)
+```
+```{r gg animate}
+penguins %>%
+  ggplot(aes(bill_length_mm, flipper_length_mm, size = body_mass_g, color = species)) +
+  geom_point(alpha = 0.7) +
+  labs(title = "Species", x = "Bill length", y = "Flipper Length") +
+  transition_states(species,
+                    transition_length = 2,
+                    state_length = 1)
+```
+animation inspiration: https://github.com/thomasp85/gganimate https://gganimate.com/articles/gganimate.html
+
+The name of the package I used is 'gganimate', and it came from CRAN. This package allows you to incorporate moving animations from your ggplots. For example, the transition function found within it allows your to "define how the data should be spread out and how it relates to itself across time" (source 1 above). I used the same penguin data and graph of bill vs flipper length, but this time I animated it so that the points / data for each penguin's flipper and bill length show up on the graph based on the species. As you can see, the blue cluster of dots for gentoo penguins have the greatest average bill and flipper lengths, while the adelie have the least for both.
+
+
+...
